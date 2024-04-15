@@ -1,4 +1,4 @@
-﻿#include "func.h"
+#include "func.h"
 #include <windows.h>
 #include<string>
 #include<vector>
@@ -203,7 +203,6 @@ void InitGame()
 #pragma endregion
 
 
-
 #pragma region Update
 void Update()
 {
@@ -222,8 +221,6 @@ void Update()
 	//up
 	else if (dogInput == 3) { dog.dogPos.y -= 10; }
 
-
-
 	//CAT MOVING
 	catInput = cat_input[cat_input.size() - 1];
 	for (int i = 0; i < cat_input.size(); i++)
@@ -237,8 +234,6 @@ void Update()
 	else if (catInput == 2) { cat.catPos.x += 10; }
 	//up
 	else if (catInput == 3) { cat.catPos.y -= 10; }
-
-
 
 	//Limit
 	if (dog.dogPos.x > win_w - dog.dogPos.w)
@@ -260,35 +255,14 @@ void Update()
 	}
 
 	//dog & milk collision
-	if (dog.dogPos.x + dog.dogPos.w >= up_milk.milkPos.x &&
-		dog.dogPos.x <= up_milk.milkPos.x + up_milk.milkPos.w &&
-		dog.dogPos.y + dog.dogPos.h >= up_milk.milkPos.y &&
-		dog.dogPos.y <= up_milk.milkPos.y + up_milk.milkPos.h)
-	{
-		std::cout << "dog collide(game over)";
-	}
+	if (SDL_HasIntersection(&dog.dogPos, &up_milk.milkPos)){std::cout << " dog collide";}
 
 	//cat & water collision
-	if (cat.catPos.x + cat.catPos.w >= down_water.waterPos.x &&
-		cat.catPos.x <= down_water.waterPos.x + down_water.waterPos.w &&
-		cat.catPos.y + cat.catPos.h >= down_water.waterPos.y &&
-		cat.catPos.y <= down_water.waterPos.y + down_water.waterPos.h)
-	{
-		std::cout << "cat collide(game over)";
-	}
+	if (SDL_HasIntersection(&cat.catPos, &down_water.waterPos)) { std::cout << " cat collide"; }
 
 	//choco & both collision
-	if ((cat.catPos.x + cat.catPos.w >= choco.chocoPos.x &&
-		cat.catPos.x <= choco.chocoPos.x + choco.chocoPos.w &&
-		cat.catPos.y + cat.catPos.h >= choco.chocoPos.y &&
-		cat.catPos.y <= choco.chocoPos.y + choco.chocoPos.h) ||
-		(dog.dogPos.x + dog.dogPos.w >= choco.chocoPos.x &&
-		 dog.dogPos.x <= choco.chocoPos.x + choco.chocoPos.w &&
-		 dog.dogPos.y + dog.dogPos.h >= choco.chocoPos.y &&
-		 dog.dogPos.y <= choco.chocoPos.y + choco.chocoPos.h))
-	{
-		std::cout << "dog or cat collide(game over)";
-	}
+	if (SDL_HasIntersection(&dog.dogPos, &choco.chocoPos)||
+		SDL_HasIntersection(&cat.catPos, &choco.chocoPos)){std::cout << "choco collide";}
 
 	g_elapsed_time_ms += 33;
 
